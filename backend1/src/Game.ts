@@ -28,7 +28,8 @@ export class Game {
     }
     makeMove(socket:WebSocket, move: {
         from:string,
-        to:string
+        to:string,
+        promotion?:string
     }){
         console.log(move.from + " -> "+ move.to)
         // validation the move using zod
@@ -98,11 +99,25 @@ export class Game {
         // }))   
 
 
+        // const opponent = socket === this.player1 ? this.player2 : this.player1;
+        // opponent.send(JSON.stringify({
+        //     type: MOVE,
+        //     payload: move
+        // }));
+
+
         const opponent = socket === this.player1 ? this.player2 : this.player1;
-        opponent.send(JSON.stringify({
+        this.player1.send(JSON.stringify({
             type: MOVE,
             payload: move
         }));
+        this.player2.send(JSON.stringify({
+            type: MOVE,
+            payload: move
+        }));        
+
+
+
            // OR  
         // if(this.board.history().length %2 === 0){
         //     this.player2.send(JSON.stringify({

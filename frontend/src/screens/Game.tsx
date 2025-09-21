@@ -21,37 +21,46 @@ export const Game = ()=>{
             const message = JSON.parse(e.data);
             
             switch (message.type){
-            case INIT_GAME:
-                setStarted(true);
-                setBoard(chess.board());
-                console.log("Game Initialize");
+                case INIT_GAME:
+                    setStarted(true);
+                    setBoard(chess.board());
+                    console.log("Game Initialize");
 
-                break;
-            case MOVE:
-                const move = message.payload;
-                console.log(move);
-                chess.move(move);
-                setBoard(chess.board());
-                console.log("Move");
-                break;
-            case GAME_OVER:
-                console.log("GameOver");
-                break;
-            case ERROR:
-                const {error : errorMessage} = message.payload;
-                console.error(errorMessage);
-                alert(errorMessage);
-                break;
+                    break;
+                case MOVE:{
+                    const move = message.payload;
+                    console.log(move);
+                    chess.move(move);
+                    setBoard(chess.board());
+                    console.log("Move");
+                    break;
+                }    
+                case GAME_OVER:{
+                    console.log("GameOver");
+                    break;
+                }                
+                case ERROR:{
+                    const {error : errorMessage} = message.payload;
+                    console.error(errorMessage);
+                    alert(errorMessage);
+                    break;
+                }    
             }    
 
         }  
     },[socket])
+
+    // ********************///
+    // Typescript red line erros solve
+    const x = false;
+    if(x) setChess(new Chess());
+    /************************ */
     if(!socket) return <div className="w-full h-screen flex items-center justify-center text-white font-bold">Connecting...</div>;
     return <div className="flex justify-center">
         <div className="pt-8 max-w-screen-lg w-full">
             <div className="grid grid-cols-6 gap-4 w-full">
                 <div className="col-span-4 w-full flex justify-center">
-                    <ChessBoard  chess={chess} setBoard={setBoard} socket={socket}  board={board} />
+                    <ChessBoard  chess={chess}  socket={socket}  board={board} />
                 </div>
                 <div className="col-span-2 bg-slate-800 w-full flex justify-center">
                     <div className="pt-8">

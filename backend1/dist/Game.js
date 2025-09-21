@@ -83,8 +83,17 @@ class Game {
         //         lan:`${move.from}-${move.to}`
         //     }
         // }))   
+        // const opponent = socket === this.player1 ? this.player2 : this.player1;
+        // opponent.send(JSON.stringify({
+        //     type: MOVE,
+        //     payload: move
+        // }));
         const opponent = socket === this.player1 ? this.player2 : this.player1;
-        opponent.send(JSON.stringify({
+        this.player1.send(JSON.stringify({
+            type: messages_1.MOVE,
+            payload: move
+        }));
+        this.player2.send(JSON.stringify({
             type: messages_1.MOVE,
             payload: move
         }));
