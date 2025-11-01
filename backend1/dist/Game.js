@@ -24,7 +24,6 @@ class Game {
     }
     makeMove(socket, move) {
         console.log(move.from + " -> " + move.to);
-        // validation the move using zod
         if (this.board.turn() === 'w' && socket !== this.player1) {
             console.log('Not your turn player(white) 1');
             socket.send(JSON.stringify({
@@ -49,8 +48,10 @@ class Game {
         // is this a valid move
         try {
             this.board.move(move);
+            console.log("HI 1");
         }
         catch (e) {
+            console.log("HI 2");
             console.log("Invalid Move");
             socket.send(JSON.stringify({
                 type: messages_1.ERROR,
@@ -60,7 +61,18 @@ class Game {
             }));
             return;
         }
+        // console.log(this.board.isGameOver());
+        // const opponent = socket === this.player1 ? this.player2 : this.player1;
+        this.player1.send(JSON.stringify({
+            type: messages_1.MOVE,
+            payload: move
+        }));
+        this.player2.send(JSON.stringify({
+            type: messages_1.MOVE,
+            payload: move
+        }));
         if (this.board.isGameOver()) {
+            console.log("HI 3");
             this.player1.send(JSON.stringify({
                 type: messages_1.GAME_OVER,
                 payload: {
@@ -88,15 +100,6 @@ class Game {
         //     type: MOVE,
         //     payload: move
         // }));
-        const opponent = socket === this.player1 ? this.player2 : this.player1;
-        this.player1.send(JSON.stringify({
-            type: messages_1.MOVE,
-            payload: move
-        }));
-        this.player2.send(JSON.stringify({
-            type: messages_1.MOVE,
-            payload: move
-        }));
         // OR  
         // if(this.board.history().length %2 === 0){
         //     this.player2.send(JSON.stringify({
