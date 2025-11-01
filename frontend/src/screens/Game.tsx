@@ -128,7 +128,12 @@ export const Game = () => {
     //   }
     }
   };
-
+    const x = false;
+    if(x){ 
+      setCapturedByBlack([]);
+      setCapturedByWhite([]);
+      setChess(new Chess());
+    }
   if (gameMode === "online" && !socket) {
     return (
       <div className="w-full h-screen flex items-center justify-center text-white font-bold text-xl">
