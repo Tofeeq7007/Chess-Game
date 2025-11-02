@@ -73,7 +73,7 @@ export const Landing = () => {
                   onClick={handlePlayOffline}
                   variant="secondary"
                 >
-                  🤖 Play Offline (vs Computer)
+                  🤖 Play Offline
                 </Button>
               </motion.div>
             </div>

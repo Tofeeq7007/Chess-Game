@@ -150,7 +150,7 @@ export const OfflineChessBoard = ({
                       <img
                         draggable
                         onDragStart={() => setFrom(squareRepresention)}
-                        className="w-12 h-12 shadow-lg cursor-grab active:cursor-grabbing hover:scale-110 transition-transform rotate-[13deg]"
+                        className="w-12 h-12  shadow-lg cursor-grab active:cursor-grabbing hover:scale-110 transition-transform rotate-[13deg]"
                         src={`/${
                           square?.color === "b"
                             ? `${square?.type}`
