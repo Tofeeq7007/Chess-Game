@@ -28,7 +28,9 @@ export const OfflineChessBoard = ({
 
   const [pendingMove, setPendingMove] = useState<Move_type | null>(null);
   const [from, setFrom] = useState<Square | null>(null);
-  const [lastMove, setLastMove] = useState<{ from: Square; to: Square } | null>(null);
+  const [lastMove, setLastMove] = useState<{ from: Square; to: Square } | null>(
+    null
+  );
 
   const handlePromotionSelect = (promotionPiece: string) => {
     if (pendingMove) {
@@ -38,7 +40,10 @@ export const OfflineChessBoard = ({
       };
       const success = onMove(completeMove);
       if (success) {
-        setLastMove({ from: pendingMove.from as Square, to: pendingMove.to as Square });
+        setLastMove({
+          from: pendingMove.from as Square,
+          to: pendingMove.to as Square,
+        });
       }
       setPendingMove(null);
     }
@@ -50,7 +55,7 @@ export const OfflineChessBoard = ({
 
   const handleSquareClick = (squareRepresention: Square) => {
     const Goti = chess.get(squareRepresention);
-    
+
     if (!from) {
       if (!Goti) return;
       if (Goti.color !== chess.turn()) return;
@@ -60,7 +65,7 @@ export const OfflineChessBoard = ({
         from,
         to: squareRepresention,
       };
-      
+
       const piece = chess.get(from);
       if (piece?.type === "p") {
         if (
@@ -82,7 +87,8 @@ export const OfflineChessBoard = ({
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center relative">
+      {/* Promotion Popup */}
       {promotionChoice.popUp && (
         <Promotion
           promotionChoice={promotionChoice}
@@ -90,13 +96,36 @@ export const OfflineChessBoard = ({
           onPromotionSelect={handlePromotionSelect}
         />
       )}
-      
-      <div className="border-8 border-gray-700 rounded-xl shadow-2xl overflow-hidden bg-gray-900">
-        {board.map((row, i) => {
-          return (
+
+      <div className="flex mb-2 text-xs text-gray-400 font-bold tracking-widest">
+        <div className="w-20 flex justify-center"><span>a</span></div>
+        <div className="w-20 flex justify-center"><span>b</span></div>
+        <div className="w-20 flex justify-center"><span>c</span></div>
+        <div className="w-20 flex justify-center"><span>d</span></div>
+        <div className="w-20 flex justify-center"><span>e</span></div>
+        <div className="w-20 flex justify-center"><span>f</span></div>
+        <div className="w-20 flex justify-center"><span>g</span></div>
+        <div className="w-20 flex justify-center"><span>h</span></div>
+      </div>
+
+      <div className="flex gap-2">
+        <div className="flex flex-col text-xs text-gray-400 font-bold">
+          <span className="w-6 h-20 flex items-center justify-center">8</span>
+          <span className="w-6 h-20 flex items-center justify-center">7</span>
+          <span className="w-6 h-20 flex items-center justify-center">6</span>
+          <span className="w-6 h-20 flex items-center justify-center">5</span>
+          <span className="w-6 h-20 flex items-center justify-center">4</span>
+          <span className="w-6 h-20 flex items-center justify-center">3</span>
+          <span className="w-6 h-20 flex items-center justify-center">2</span>
+          <span className="w-6 h-20 flex items-center justify-center">1</span>
+        </div>
+
+        <div className="border-8 border-gray-700 rounded-xl shadow-2xl overflow-hidden bg-gray-900">
+          {board.map((row, i) => (
             <div key={i} className="flex">
               {row.map((square, j) => {
-                const squareRepresention = String.fromCharCode(97 + (j % 8)) + "" + (8 - i) as Square;
+                const squareRepresention =
+                  (String.fromCharCode(97 + (j % 8)) + "" + (8 - i)) as Square;
                 const isLight = (i + j) % 2 === 0;
                 const isSelected = from === squareRepresention;
                 const isLastMoveFrom = lastMove?.from === squareRepresention;
@@ -106,9 +135,12 @@ export const OfflineChessBoard = ({
                   <div
                     key={j}
                     onClick={() => handleSquareClick(squareRepresention)}
-                    className={`w-20 h-20 flex items-center justify-center transition-all cursor-move
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={() => handleSquareClick(squareRepresention)}
+                    className={`w-20 h-20 flex items-center justify-center transition-all cursor-move relative
                       ${isLight ? "bg-amber-100" : "bg-amber-700"}
                       ${isSelected ? "ring-4 ring-green-400 ring-inset" : ""}
+                      ${isLastMoveFrom || isLastMoveTo ? "bg-opacity-50" : ""}
                       ${isLastMoveFrom ? "bg-yellow-300" : ""}
                       ${isLastMoveTo ? "bg-yellow-400" : ""}
                       hover:brightness-110 transition-all
@@ -118,7 +150,7 @@ export const OfflineChessBoard = ({
                       <img
                         draggable
                         onDragStart={() => setFrom(squareRepresention)}
-                        className="w-14 h-14 shadow-lg cursor-grab active:cursor-grabbing hover:scale-110 transition-transform"
+                        className="w-12 h-12 shadow-lg cursor-grab active:cursor-grabbing hover:scale-110 transition-transform rotate-[13deg]"
                         src={`/${
                           square?.color === "b"
                             ? `${square?.type}`
@@ -131,13 +163,20 @@ export const OfflineChessBoard = ({
                 );
               })}
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
 
-      <div className="flex justify-between mt-3 px-2 text-xs text-gray-400 font-bold tracking-widest">
-        <span>a</span><span>b</span><span>c</span><span>d</span>
-        <span>e</span><span>f</span><span>g</span><span>h</span>
+      <div className="flex mt-2 text-xs text-gray-400 font-bold tracking-widest">
+        <div className="w-6"></div>
+        <div className="w-20 flex justify-center"><span>a</span></div>
+        <div className="w-20 flex justify-center"><span>b</span></div>
+        <div className="w-20 flex justify-center"><span>c</span></div>
+        <div className="w-20 flex justify-center"><span>d</span></div>
+        <div className="w-20 flex justify-center"><span>e</span></div>
+        <div className="w-20 flex justify-center"><span>f</span></div>
+        <div className="w-20 flex justify-center"><span>g</span></div>
+        <div className="w-20 flex justify-center"><span>h</span></div>
       </div>
     </div>
   );

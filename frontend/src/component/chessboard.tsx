@@ -64,7 +64,7 @@ export const ChessBoard = ({
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center relative">
       {promotionChoice.popUp && (
         <Promotion
           promotionChoice={promotionChoice}
@@ -72,9 +72,31 @@ export const ChessBoard = ({
           onPromotionSelect={handlePromotionSelect}
         />
       )}
+
+      <div className="flex mb-2 text-xs text-gray-400 font-bold tracking-widest">
+        <div className="w-20 flex justify-center"><span>a</span></div>
+        <div className="w-20 flex justify-center"><span>b</span></div>
+        <div className="w-20 flex justify-center"><span>c</span></div>
+        <div className="w-20 flex justify-center"><span>d</span></div>
+        <div className="w-20 flex justify-center"><span>e</span></div>
+        <div className="w-20 flex justify-center"><span>f</span></div>
+        <div className="w-20 flex justify-center"><span>g</span></div>
+        <div className="w-20 flex justify-center"><span>h</span></div>
+      </div>
       
-      {/* Chessboard Container */}
-      <div className="border-8 border-gray-700 rounded-xl shadow-2xl overflow-hidden bg-gray-900">
+      <div className="flex gap-2">
+        <div className="flex flex-col text-xs text-gray-400 font-bold">
+          <span className="w-6 h-20 flex items-center justify-center">8</span>
+          <span className="w-6 h-20 flex items-center justify-center">7</span>
+          <span className="w-6 h-20 flex items-center justify-center">6</span>
+          <span className="w-6 h-20 flex items-center justify-center">5</span>
+          <span className="w-6 h-20 flex items-center justify-center">4</span>
+          <span className="w-6 h-20 flex items-center justify-center">3</span>
+          <span className="w-6 h-20 flex items-center justify-center">2</span>
+          <span className="w-6 h-20 flex items-center justify-center">1</span>
+        </div>
+
+        <div className="border-8 border-gray-700 rounded-xl shadow-2xl overflow-hidden bg-gray-900">
         {board.map((row, i) => {
           return (
             <div key={i} className="flex">
@@ -149,12 +171,12 @@ export const ChessBoard = ({
                     `}
                   >
                     {/* Piece Image */}
-                    <div className="w-full h-full  flex justify-center items-center">
+                    <div className="w-full h-full flex justify-center items-center">
                       {square ? (
                         <img
                           draggable
                           onDragStart={() => setFrom(squareRepresention)}
-                          className="w-12 h-12 shadow-lg rotate-13  cursor-grab active:cursor-grabbing hover:scale-110 transition-transform"
+                          className="w-12 h-12 shadow-lg cursor-grab active:cursor-grabbing hover:scale-110 transition-transform rotate-[13deg]"
                           src={`/${
                             square?.color === "b"
                               ? `${square?.type}`
@@ -170,10 +192,11 @@ export const ChessBoard = ({
             </div>
           );
         })}
+        </div>
       </div>
 
-      {/* Board Coordinates */}
-      <div className="flex mt-3 text-xs text-gray-400 font-bold tracking-widest">
+      <div className="flex mt-2 text-xs text-gray-400 font-bold tracking-widest">
+        <div className="w-6"></div>
         <div className="w-20 flex justify-center"><span>a</span></div>
         <div className="w-20 flex justify-center"><span>b</span></div>
         <div className="w-20 flex justify-center"><span>c</span></div>
@@ -182,18 +205,6 @@ export const ChessBoard = ({
         <div className="w-20 flex justify-center"><span>f</span></div>
         <div className="w-20 flex justify-center"><span>g</span></div>
         <div className="w-20 flex justify-center"><span>h</span></div>
-      </div>
-
-      {/* Vertical Coordinates */}
-      <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex flex-col justify-between text-xs text-gray-400 font-bold h-80">
-        <span>8</span>
-        <span>7</span>
-        <span>6</span>
-        <span>5</span>
-        <span>4</span>
-        <span>3</span>
-        <span>2</span>
-        <span>1</span>
       </div>
     </div>
   );
