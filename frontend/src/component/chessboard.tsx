@@ -64,7 +64,7 @@ export const ChessBoard = ({
   };
 
   return (
-    <div className="flex flex-col items-center relative">
+    <div className="flex flex-col items-center relative px-2 sm:px-4">
       {promotionChoice.popUp && (
         <Promotion
           promotionChoice={promotionChoice}
@@ -73,30 +73,30 @@ export const ChessBoard = ({
         />
       )}
 
-      <div className="flex mb-2 text-xs text-gray-400 font-bold tracking-widest">
-        <div className="w-20 flex justify-center"><span>a</span></div>
-        <div className="w-20 flex justify-center"><span>b</span></div>
-        <div className="w-20 flex justify-center"><span>c</span></div>
-        <div className="w-20 flex justify-center"><span>d</span></div>
-        <div className="w-20 flex justify-center"><span>e</span></div>
-        <div className="w-20 flex justify-center"><span>f</span></div>
-        <div className="w-20 flex justify-center"><span>g</span></div>
-        <div className="w-20 flex justify-center"><span>h</span></div>
+      <div className="flex mb-1 sm:mb-2 text-xs sm:text-sm text-gray-400 font-bold tracking-widest">
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>a</span></div>
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>b</span></div>
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>c</span></div>
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>d</span></div>
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>e</span></div>
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>f</span></div>
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>g</span></div>
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>h</span></div>
       </div>
       
-      <div className="flex gap-2">
-        <div className="flex flex-col text-xs text-gray-400 font-bold">
-          <span className="w-6 h-20 flex items-center justify-center">8</span>
-          <span className="w-6 h-20 flex items-center justify-center">7</span>
-          <span className="w-6 h-20 flex items-center justify-center">6</span>
-          <span className="w-6 h-20 flex items-center justify-center">5</span>
-          <span className="w-6 h-20 flex items-center justify-center">4</span>
-          <span className="w-6 h-20 flex items-center justify-center">3</span>
-          <span className="w-6 h-20 flex items-center justify-center">2</span>
-          <span className="w-6 h-20 flex items-center justify-center">1</span>
+      <div className="flex gap-1 sm:gap-2">
+        <div className="flex flex-col text-xs sm:text-sm text-gray-400 font-bold">
+          <span className="w-4 sm:w-5 md:w-6 h-10 sm:h-16 md:h-20 flex items-center justify-center">8</span>
+          <span className="w-4 sm:w-5 md:w-6 h-10 sm:h-16 md:h-20 flex items-center justify-center">7</span>
+          <span className="w-4 sm:w-5 md:w-6 h-10 sm:h-16 md:h-20 flex items-center justify-center">6</span>
+          <span className="w-4 sm:w-5 md:w-6 h-10 sm:h-16 md:h-20 flex items-center justify-center">5</span>
+          <span className="w-4 sm:w-5 md:w-6 h-10 sm:h-16 md:h-20 flex items-center justify-center">4</span>
+          <span className="w-4 sm:w-5 md:w-6 h-10 sm:h-16 md:h-20 flex items-center justify-center">3</span>
+          <span className="w-4 sm:w-5 md:w-6 h-10 sm:h-16 md:h-20 flex items-center justify-center">2</span>
+          <span className="w-4 sm:w-5 md:w-6 h-10 sm:h-16 md:h-20 flex items-center justify-center">1</span>
         </div>
 
-        <div className="border-8 border-gray-700 rounded-xl shadow-2xl overflow-hidden bg-gray-900">
+        <div className="border-4 sm:border-6 md:border-8 border-gray-700 rounded-lg sm:rounded-xl shadow-lg sm:shadow-2xl overflow-hidden bg-gray-900">
         {board.map((row, i) => {
           return (
             <div key={i} className="flex">
@@ -107,76 +107,53 @@ export const ChessBoard = ({
                 const isLastMoveFrom = lastMove?.from === squareRepresention;
                 const isLastMoveTo = lastMove?.to === squareRepresention;
 
+                const handleSquareInteraction = () => {
+                  const Goti = chess.get(squareRepresention);
+                  if (!from) {
+                    if (!Goti) return;
+                    if (Goti.color !== chess.turn()) return;
+                    setFrom(squareRepresention);
+                  } else {
+                    const move: Move_type = {
+                      from,
+                      to: squareRepresention,
+                    };
+                    const piece = chess.get(from);
+                    if (piece?.type === "p") {
+                      if (
+                        (piece.color === "w" && move.to.endsWith("8")) ||
+                        (piece.color === "b" && move.to.endsWith("1"))
+                      ) {
+                        setPendingMove(move);
+                        setPromotionChoice({ promotion: "q", popUp: true });
+                        return;
+                      }
+                    }
+                    sendMove(move);
+                  }
+                };
+
                 return (
                   <div
                     key={j}
-                    onClick={() => {
-                      const Goti = chess.get(squareRepresention);
-                      if (!from) {
-                        if (!Goti) return;
-                        if (Goti.color !== chess.turn()) return;
-                        setFrom(squareRepresention);
-                      } else {
-                        const move: Move_type = {
-                          from,
-                          to: squareRepresention,
-                        };
-                        const piece = chess.get(from);
-                        if (piece?.type === "p") {
-                          if (
-                            (piece.color === "w" && move.to.endsWith("8")) ||
-                            (piece.color === "b" && move.to.endsWith("1"))
-                          ) {
-                            setPendingMove(move);
-                            setPromotionChoice({ promotion: "q", popUp: true });
-                            return;
-                          }
-                        }
-                        sendMove(move);
-                      }
-                    }}
+                    onClick={handleSquareInteraction}
                     onDragOver={(e) => e.preventDefault()}
-                    onDrop={() => {
-                      const Goti = chess.get(squareRepresention);
-                      if (!from) {
-                        if (!Goti) return;
-                        if (Goti.color !== chess.turn()) return;
-                        setFrom(squareRepresention);
-                      } else {
-                        const move: Move_type = {
-                          from,
-                          to: squareRepresention,
-                        };
-                        const piece = chess.get(from);
-                        if (piece?.type === "p") {
-                          if (
-                            (piece.color === "w" && move.to.endsWith("8")) ||
-                            (piece.color === "b" && move.to.endsWith("1"))
-                          ) {
-                            setPendingMove(move);
-                            setPromotionChoice({ promotion: "q", popUp: true });
-                            return;
-                          }
-                        }
-                        sendMove(move);
-                      }
-                    }}
-                    className={`w-20 h-20 flex items-center justify-center transition-all cursor-move relative
+                    onDrop={handleSquareInteraction}
+                    className={`w-8 sm:w-15 md:w-17 h-10 sm:h-16 md:h-20 flex items-center justify-center transition-all cursor-move relative
                       ${isLight ? "bg-amber-100" : "bg-amber-700"}
-                      ${isSelected ? "ring-4 ring-green-400 ring-inset" : ""}
+                      ${isSelected ? "ring-2 sm:ring-4 ring-green-400 ring-inset" : ""}
                       ${isLastMoveFrom || isLastMoveTo ? "bg-opacity-50" : ""}
                       ${isLastMoveFrom ? "bg-yellow-300" : ""}
                       ${isLastMoveTo ? "bg-yellow-400" : ""}
                       hover:brightness-110 transition-all
                     `}
                   >
-                    {/* Piece Image */}
                     <div className="w-full h-full flex justify-center items-center">
                       {square ? (
                         <img
                           draggable
                           onDragStart={() => setFrom(squareRepresention)}
-                          className="w-12 h-12 shadow-lg cursor-grab active:cursor-grabbing hover:scale-110 transition-transform rotate-[13deg]"
+                          className="w-6 sm:w-10 md:w-12 h-6 sm:h-10 md:h-12 shadow-lg cursor-grab active:cursor-grabbing hover:scale-110 transition-transform rotate-[13deg]"
                           src={`/${
                             square?.color === "b"
                               ? `${square?.type}`
@@ -195,16 +172,16 @@ export const ChessBoard = ({
         </div>
       </div>
 
-      <div className="flex mt-2 text-xs text-gray-400 font-bold tracking-widest">
-        <div className="w-6"></div>
-        <div className="w-20 flex justify-center"><span>a</span></div>
-        <div className="w-20 flex justify-center"><span>b</span></div>
-        <div className="w-20 flex justify-center"><span>c</span></div>
-        <div className="w-20 flex justify-center"><span>d</span></div>
-        <div className="w-20 flex justify-center"><span>e</span></div>
-        <div className="w-20 flex justify-center"><span>f</span></div>
-        <div className="w-20 flex justify-center"><span>g</span></div>
-        <div className="w-20 flex justify-center"><span>h</span></div>
+      <div className="flex mt-1 sm:mt-2 text-xs sm:text-sm text-gray-400 font-bold tracking-widest">
+        <div className="w-4 sm:w-5 md:w-6"></div>
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>a</span></div>
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>b</span></div>
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>c</span></div>
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>d</span></div>
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>e</span></div>
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>f</span></div>
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>g</span></div>
+        <div className="w-8 sm:w-15 md:w-17 flex justify-center"><span>h</span></div>
       </div>
     </div>
   );

@@ -88,7 +88,6 @@ export const OfflineChessBoard = ({
 
   return (
     <div className="flex flex-col items-center relative px-2 sm:px-4">
-      {/* Promotion Popup */}
       {promotionChoice.popUp && (
         <Promotion
           promotionChoice={promotionChoice}
@@ -97,7 +96,6 @@ export const OfflineChessBoard = ({
         />
       )}
 
-      {/* Column labels (a-h) - RESPONSIVE */}
       <div className="flex mb-1 sm:mb-2 text-xs sm:text-sm text-gray-400 font-bold tracking-widest">
         <div className="w-8 sm:w-16 md:w-17 flex justify-center"><span>a</span></div>
         <div className="w-8 sm:w-16 md:w-17 flex justify-center"><span>b</span></div>
@@ -110,7 +108,6 @@ export const OfflineChessBoard = ({
       </div>
 
       <div className="flex gap-1 sm:gap-2">
-        {/* Row numbers (8-1) - RESPONSIVE */}
         <div className="flex flex-col text-xs sm:text-sm text-gray-400 font-bold">
           <span className="w-4 sm:w-5 md:w-6 h-10 sm:h-16 md:h-20 flex items-center justify-center">8</span>
           <span className="w-4 sm:w-5 md:w-6 h-10 sm:h-16 md:h-20 flex items-center justify-center">7</span>
@@ -122,7 +119,6 @@ export const OfflineChessBoard = ({
           <span className="w-4 sm:w-5 md:w-6 h-10 sm:h-16 md:h-20 flex items-center justify-center">1</span>
         </div>
 
-        {/* Chessboard - RESPONSIVE */}
         <div className="border-4 sm:border-6 md:border-8 border-gray-700 rounded-lg sm:rounded-xl shadow-lg sm:shadow-2xl overflow-hidden bg-gray-900">
           {board.map((row, i) => (
             <div key={i} className="flex">
@@ -170,7 +166,6 @@ export const OfflineChessBoard = ({
         </div>
       </div>
 
-      {/* Bottom column labels - RESPONSIVE */}
       <div className="flex mt-1 sm:mt-2 text-xs sm:text-sm text-gray-400 font-bold tracking-widest">
         <div className="w-4 sm:w-5 md:w-6"></div>
         <div className="w-8 sm:w-16 md:w-17 flex justify-center"><span>a</span></div>
